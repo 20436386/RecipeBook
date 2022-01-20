@@ -7,4 +7,19 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'CourseProject';
+
+  recipeDisplay:boolean = false;
+  shoppingListDisplay:boolean = false;
+  // currentNav:string = '';
+
+  onNavigate(navTarget: string){
+    // console.log(navTarget);
+    if(navTarget === "nav-recipe"){
+      this.recipeDisplay = true;
+      this.shoppingListDisplay = false;
+    }else if(navTarget === "nav-Shopping-List"){
+      this.shoppingListDisplay = true;
+      this.recipeDisplay = false;
+    }
+  }
 }

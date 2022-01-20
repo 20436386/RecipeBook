@@ -1,1 +1,20 @@
-<p>recipe-item works!</p>
+<a href="#" class='list-group-item'>
+    <!-- https://getbootstrap.com/docs/5.1/components/list-group/ -->
+    <div class='row'>
+        <div class='col-sm-6'>
+            <h3 class="list-group-item-heading">{{recipe.name}}</h3>
+            <p class="list-group-item-text">{{recipe.description}}</p>
+        </div>
+        <div class="col-sm-6 d-flex justify-content-center">
+            <!-- Note in image below you can use string interpolation
+            to link to image src or you can use property binding to 
+            bind to src property -->
+            <!-- <img src="{{recipe.imgpath}}"alt="#" class='img-fluid rounded' style='max-height: 100px;'> -->
+            <img 
+                [src]="recipe.imgpath" 
+                alt="#" 
+                class='img-fluid rounded' 
+                style='max-height: 100px;'>
+        </div>
+    </div>
+</a>

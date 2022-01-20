@@ -1,1 +1,30 @@
-<p>shopping-list-edit works!</p>
+<div class='row'>
+    <div class='col-sm-12'>
+        <form>
+            <div class='row'>
+                <div class='col-sm-5 form-group'>
+                    <label for="name"><strong>Name</strong></label>
+                    <!-- <input type="text" class='form-control' id='name'> -->
+                    <input type="text" class='form-control' id='name' #ingredientName>
+                </div>
+                <div class='col-sm-2 form-group'>
+                    <label for="amount"><strong>Amount</strong></label>
+                    <!-- <input type="text" class='form-control' id='amount'> -->
+                    <input type="text" class='form-control' id='amount' #ingredientAmount>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- <button type="submit" class='btn btn-success m-1'>Add</button> -->
+                    <!-- <button type="submit" class='btn btn-danger m-1'>Delete</button> -->
+                    <!-- <button type="submit" class='btn btn-primary m-1'>Clear</button> -->
+
+                    <button type="submit" (click)="onAdd()" class='btn btn-success m-1'>Add</button>
+                    <button type="submit" (click)="onDelete()" class='btn btn-danger m-1'>Delete</button>
+                    <button type="submit" (click)="onClear()" class='btn btn-primary m-1'>Clear</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
