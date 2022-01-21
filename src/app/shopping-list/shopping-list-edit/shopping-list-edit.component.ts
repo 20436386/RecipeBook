@@ -9,8 +9,8 @@ import { Ingredient } from 'src/app/shared/ingredient.model';
 })
 export class ShoppingListEditComponent implements OnInit {
 
-  @ViewChild('ingredientName', {static:false}) name: ElementRef;
-  @ViewChild('ingredientAmount', {static:false}) amount: ElementRef;
+  @ViewChild('ingredientName', {static:false}) nameInputRef: ElementRef;
+  @ViewChild('ingredientAmount', {static:false}) amountInputRef: ElementRef;
   @Output() shoppingListEdit = new EventEmitter<{action:string, data:Ingredient}>();
 
   constructor() { }
@@ -18,27 +18,27 @@ export class ShoppingListEditComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onAdd(){
+  onAddItem(){
     console.log("onAdd called")
+    const newIngredient = new Ingredient(this.nameInputRef.nativeElement.value, parseInt(this.amountInputRef.nativeElement.value));
     this.shoppingListEdit.emit({
       action: "add", 
-      data: {name: this.name.nativeElement.value,
-      amount: parseInt(this.amount.nativeElement.value)}
+      data: newIngredient
     })
 }
 
-  onDelete(){
+  onDeleteItem(){
+    const newIngredient = new Ingredient(this.nameInputRef.nativeElement.value, parseInt(this.amountInputRef.nativeElement.value));
     this.shoppingListEdit.emit({
       action: "remove", 
-      data: {name: this.name.nativeElement.value,
-      amount: parseInt(this.amount.nativeElement.value)}
+      data: newIngredient
     })
 }
 
   onClear(){
-    console.log(this.name)
-    this.name.nativeElement.value = '';
-    this.amount.nativeElement.value = '';
+    console.log(this.nameInputRef)
+    this.nameInputRef.nativeElement.value = '';
+    this.amountInputRef.nativeElement.value = '';
   }
 
 }
