@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'CourseProject';
 
-  recipeDisplay:boolean = false;
+  recipeDisplay:boolean = true;
   shoppingListDisplay:boolean = false;
   // currentNav:string = '';
 

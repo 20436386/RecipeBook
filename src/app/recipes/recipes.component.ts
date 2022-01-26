@@ -1,32 +1,22 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { RecipeService } from './recipe.service';
 import { Recipe } from './recipes.model';
 
 @Component({
   selector: 'app-recipes',
   templateUrl: './recipes.component.html',
-  styleUrls: ['./recipes.component.css']
+  styleUrls: ['./recipes.component.css'],
+  providers: [RecipeService]
 })
 export class RecipesComponent implements OnInit {
 
-  // private focusedRecipe: Recipe;
   focusedRecipe: Recipe;
-  // @Input() detailDisabled: boolean = true;
 
-  constructor() { }
+  constructor(private recipeService: RecipeService) { }
 
   ngOnInit(): void {
-  }
-
-  // getFocusedRecipe(){
-  //   console.log("getFocusedRecipe executed")
-  //   console.log(this.focusedRecipe)
-  //   return this.focusedRecipe;
-  // }
-
-  onRecipeSelected(focusedRecipe: Recipe){
-    // console.log("onRecipeSelected executed")
-    // console.log(focusedRecipe)
-    this.focusedRecipe = focusedRecipe;
-    // this.detailDisabled = false;
+      this.recipeService.recipeSelected.subscribe((selectedRecipe: Recipe) =>{
+      this.focusedRecipe = selectedRecipe;
+    })
   }
 }

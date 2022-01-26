@@ -34,7 +34,7 @@ export class DropdownDirective implements OnInit{
 
   //This event handler will be called whenever a click occurs on the document
   @HostListener('document:click', ['$event']) toggleOpen(event: MouseEvent) {
-    console.log(event)
+    // console.log(event)
     //https://www.geeksforgeeks.org/collect-js-contains-method/
     if(this.currentElement.nativeElement.contains(event.target)){
       if(!this.dropped){
