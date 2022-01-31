@@ -6,7 +6,8 @@ import { Recipe } from './recipes.model';
 @Injectable()
 export class RecipeService{
 
-    recipeSelected = new EventEmitter<Recipe>();
+    //Event emitter was used to pass selected recipe before routing was implemented
+    // recipeSelected = new EventEmitter<Recipe>();
 
     private recipes: Recipe[] = [
         new Recipe('Eggs Benedict',

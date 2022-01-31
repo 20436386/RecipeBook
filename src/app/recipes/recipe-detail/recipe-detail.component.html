@@ -18,25 +18,12 @@
             <button appDropdown type='button' data-bs-toggle="dropdown" class='btn btn-primary dropdown-toggle'>Manage Recipe</button>
             <ul class='dropdown-menu'>
                 <li><a class="dropdown-item" style="cursor: pointer;" (click)="onAddToList()">Add ingredients to shopping list</a></li>
-                <li><a class="dropdown-item" href="#">Edit recipe</a></li>
-                <li><a class="dropdown-item" href="#">Delete recipe</a></li>
+                <li><a class="dropdown-item" style="cursor: pointer;" [routerLink]="['/recipes/update', recipeIndex]" >Edit recipe</a></li>
+                <li><a class="dropdown-item" style="cursor: pointer;" >Delete recipe</a></li>
             </ul>
         </div>
     </div>
 </div>
-
-<!-- <div class='row'>
-    <div class='col-12'>
-        <div class='dropdown'>
-            <button type='button' data-bs-toggle="dropdown" class='btn btn-primary dropdown-toggle'>Manage Recipe</button>
-            <ul class='dropdown-menu show'>
-                <li><a class="dropdown-item" href="#">Add ingredients to shopping list</a></li>
-                <li><a class="dropdown-item" href="#">Edit recipe</a></li>
-                <li><a class="dropdown-item" href="#">Delete recipe</a></li>
-            </ul>
-        </div>
-    </div>
-</div> -->
 
 <div class='row'>
     <div class='col-12'>

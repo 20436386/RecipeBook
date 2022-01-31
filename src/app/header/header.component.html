@@ -7,22 +7,31 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <!-- NB: could just pass a string straight to onSelect as below -->
             <!-- <a class="nav-link" href="#" (click)="onSelect('nav-recipe')">Recipes</a> -->
-            <a class="nav-link" href="#" (click)="onSelect($event)">Recipes</a>
+            <!-- NB: could just pass a string straight to onSelect as below -->
+
+            <!-- This was used before routing was implemented, routing was done using event emitting and ngIf -->
+            <!-- <a class="nav-link" href="#" (click)="onSelect($event)">Recipes</a> -->
+
+            <!-- NB must remove href below or server will reload page everytime -->
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/recipes']">Recipes</a>
+
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" (click)="onSelect($event)">Shopping List</a>
+            <!-- This was used before routing was implemented, routing was done using event emitting and ngIf -->
+            <!-- <a class="nav-link" href="#" (click)="onSelect($event)">Shopping List</a> -->
+
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/shopping-list']">Shopping List</a>
           </li>
         </ul>
         <ul class="navbar-nav ms-auto">
             <li class="nav-item dropdown">
-                <a appDropdown class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a appDropdown class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Manage
                 </a>
                 <ul class="dropdown-menu ms-auto" aria-labelledby="navbarDropdownMenuLink">
-                    <li><a class="dropdown-item" href="#">Save</a></li>
-                    <li><a class="dropdown-item" href="#">Fetch</a></li>
+                    <li><a class="dropdown-item" style="cursor: pointer;" >Save</a></li>
+                    <li><a class="dropdown-item" style="cursor: pointer;" >Fetch</a></li>
                 </ul>
             </li>
         </ul>

@@ -10,13 +10,15 @@ import { Recipe } from './recipes.model';
 })
 export class RecipesComponent implements OnInit {
 
-  focusedRecipe: Recipe;
+  //Code used before routing setup
+  // focusedRecipe: Recipe;
 
   constructor(private recipeService: RecipeService) { }
 
   ngOnInit(): void {
-      this.recipeService.recipeSelected.subscribe((selectedRecipe: Recipe) =>{
-      this.focusedRecipe = selectedRecipe;
-    })
+    //Code used before routing setup
+    //   this.recipeService.recipeSelected.subscribe((selectedRecipe: Recipe) =>{
+    //   this.focusedRecipe = selectedRecipe;
+    // })
   }
 }
