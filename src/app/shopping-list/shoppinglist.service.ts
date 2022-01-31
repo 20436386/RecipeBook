@@ -1,4 +1,5 @@
-import { EventEmitter, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
+import { Subject } from "rxjs";
 import { Ingredient } from "../shared/ingredient.model";
 
 @Injectable({
@@ -6,7 +7,7 @@ import { Ingredient } from "../shared/ingredient.model";
 })
 export class ShoppingListService{
 
-    listChanged = new EventEmitter<Ingredient[]>();
+    listChanged = new Subject<Ingredient[]>();
 
     private ingredients: Ingredient[] = [
         new Ingredient('cheese', 20)
@@ -19,7 +20,7 @@ export class ShoppingListService{
     addItem(item: Ingredient){
         // console.log("AddItem called");
         this.ingredients.push(item);
-        this.listChanged.emit(this.ingredients.slice());
+        this.listChanged.next(this.ingredients.slice());
     }
 
     addManyItems(ingredients: Ingredient[]){
@@ -30,7 +31,7 @@ export class ShoppingListService{
 
         //Take note of the spread operator!!!
         this.ingredients.push(...ingredients);
-        this.listChanged.emit(this.ingredients.slice());
+        this.listChanged.next(this.ingredients.slice());
     }
 
     deleteItem(item: Ingredient){
@@ -48,6 +49,6 @@ export class ShoppingListService{
             return console.log("Entry Does not exist");
           }
 
-        this.listChanged.emit(this.ingredients.slice());
+        this.listChanged.next(this.ingredients.slice());
     }
 }

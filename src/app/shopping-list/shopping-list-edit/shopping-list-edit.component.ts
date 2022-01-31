@@ -31,7 +31,7 @@ export class ShoppingListEditComponent implements OnInit {
   }
 
   onClear(){
-    console.log(this.nameInputRef)
+    // console.log(this.nameInputRef)
     this.nameInputRef.nativeElement.value = '';
     this.amountInputRef.nativeElement.value = '';
   }

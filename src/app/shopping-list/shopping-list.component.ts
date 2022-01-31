@@ -1,4 +1,5 @@
-import { Component, DoCheck, Injectable, OnInit } from '@angular/core';
+import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from './shoppinglist.service';
 
@@ -8,7 +9,9 @@ import { ShoppingListService } from './shoppinglist.service';
   styleUrls: ['./shopping-list.component.css'],
   providers: []
 })
-export class ShoppingListComponent implements OnInit, DoCheck {
+export class ShoppingListComponent implements OnInit, DoCheck, OnDestroy {
+
+  private listChangedSub: Subscription;
 
   ingredients: Ingredient[];
 
@@ -16,12 +19,16 @@ export class ShoppingListComponent implements OnInit, DoCheck {
 
   ngOnInit(): void {
     this.ingredients = this.shoppingListService.getIngredients();
-    this.shoppingListService.listChanged.subscribe((list: Ingredient[]) =>{
+    this.listChangedSub = this.shoppingListService.listChanged.subscribe((list: Ingredient[]) =>{
       this.ingredients = list;
     })
   }
 
   ngDoCheck(): void {
     // this.ingredients = this.shoppingListService.getIngredients();
+  }
+
+  ngOnDestroy(){
+    this.listChangedSub.unsubscribe();
   }
 }
