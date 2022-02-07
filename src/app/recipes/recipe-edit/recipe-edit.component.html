@@ -1,1 +1,66 @@
-<p>recipe-edit works!</p>
+<div class="row">
+    <div class="col-xs-12">
+        <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
+            <div class="row">
+                <div class="col-12">
+                    <button type="Submit" class="btn btn-success mt-1" [disabled]="recipeForm.invalid" *ngIf="!editMode">Submit Recipe</button>
+                    <button type="Submit" class="btn btn-success mt-1" [disabled]="recipeForm.invalid" *ngIf="editMode">Update Recipe</button>
+                    <button type="button" class="btn btn-danger m-1" [routerLink]="['/recipes']">Cancel</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <label for="name">Recipe Name</label>
+                    <input type="text" formControlName="name" id="name" class="form-control">
+                    <div class="form-text" *ngIf="recipeForm.get('name').touched && recipeForm.get('name').invalid">This field is required!</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <label for="imgpath">Image URL</label>
+                    <input type="text" formControlName="imgpath" id="imgpath" class="form-control">
+                    <div class="form-text" *ngIf="recipeForm.get('imgpath').touched && recipeForm.get('imgpath').invalid">This field is required!</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 mt-2">
+                    <img [src]="recipeForm.get('imgpath').value" class='img-fluid rounded' style='max-height: 200px;'>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <label for="description">Description</label>
+                    <textarea type="text" formControlName="description" id="description" rows="6" class="form-control"></textarea>
+                    <div class="form-text" *ngIf="recipeForm.get('description').touched && recipeForm.get('description').invalid">This field is required!</div>
+                </div>
+            </div>
+            <br>
+            <div formArrayName="ingredients" class="col-12">
+                <h3>Ingredients</h3>
+                <button type="button" (click)="addIngredient()" class="btn btn-primary">New Ingredient</button>
+
+                <div *ngFor="let item of controls; let i = index">
+                    <div [formGroupName]="i">
+                        <div class="row mt-1" >
+                            <div class="col-sm-8">
+                                <input type="text" id="ingredientName" class="form-control" formControlName="name">
+                            </div>
+            
+                            <div class="col-sm-2">
+                                <input type="number" id="ingredientAmount" class="form-control" formControlName="amount">
+                            </div>
+            
+                            <div class="col-sm-2">
+                                <button type="button" class="btn btn-danger" (click)="removeIngredient(i)">X</button>
+                            </div>
+                        </div>
+                        <div *ngIf="item.touched && item.invalid">
+                            <div class="form-text" *ngIf="(item.get('amount').errors['required'] !== null) || (item.get('name').errors['required'] !== null)">This field is required!</div>
+                            <div class="form-text" *ngIf="item.get('amount').errors['pattern'] !== null">Quantity value is invalid!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
