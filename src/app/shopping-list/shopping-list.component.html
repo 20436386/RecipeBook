@@ -7,7 +7,9 @@
             <a 
                 class='list-group-item' 
                 style='cursor:pointer'
-                *ngFor='let item of ingredients'>
+                (click)="ingredientSelected(i)"
+                [ngClass]="{'active': (itemSelectedIndex === i)}"
+                *ngFor='let item of ingredients; let i = index'>
                 {{item.name}} ({{item.amount}})
             </a>
         </ul>

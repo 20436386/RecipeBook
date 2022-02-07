@@ -1,28 +1,25 @@
 <div class='row'>
     <div class='col-sm-12'>
-        <form>
+        <form (ngSubmit)="onSubmit()" #ingredientForm="ngForm">
             <div class='row'>
                 <div class='col-sm-5 form-group'>
                     <label for="name"><strong>Name</strong></label>
-                    <!-- <input type="text" class='form-control' id='name'> -->
-                    <input type="text" class='form-control' id='name' #ingredientName>
+                    <input type="text" class='form-control' id='name' ngModel name="ingredientName" required>
                 </div>
                 <div class='col-sm-2 form-group'>
                     <label for="amount"><strong>Amount</strong></label>
-                    <!-- <input type="text" class='form-control' id='amount'> -->
-                    <input type="text" class='form-control' id='amount' #ingredientAmount>
+                    <!-- Note: pattern id a built in validator that takes a regular expression (regex pattern) as value -->
+                    <input type="number" class='form-control' id='amount' ngModel name="ingredientAmount" required [pattern]="'^[1-9]+[0-9]*$'">
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-xs-12">
-                    <!-- <button type="submit" class='btn btn-success m-1'>Add</button> -->
-                    <!-- <button type="submit" class='btn btn-danger m-1'>Delete</button> -->
-                    <!-- <button type="submit" class='btn btn-primary m-1'>Clear</button> -->
 
-                    <button type="submit" (click)="onAddItem()" class='btn btn-success m-1'>Add</button>
-                    <button type="submit" (click)="onDeleteItem()" class='btn btn-danger m-1'>Delete</button>
-                    <button type="submit" (click)="onClear()" class='btn btn-primary m-1'>Clear</button>
+                    <button type="submit" class='btn btn-success m-1' *ngIf="!editMode" [disabled]="ingredientForm.invalid">Add</button>
+                    <button type="submit" class='btn btn-success m-1' *ngIf="editMode" [disabled]="ingredientForm.invalid">Update</button>
+                    <button type="button" (click)="onDelete()" class='btn btn-danger m-1' *ngIf = "editMode">Delete</button>
+                    <button type="button" (click)="onClearForm()" class='btn btn-primary m-1'>Clear</button>
                 </div>
             </div>
         </form>

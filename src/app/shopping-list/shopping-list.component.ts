@@ -12,6 +12,7 @@ import { ShoppingListService } from './shoppinglist.service';
 export class ShoppingListComponent implements OnInit, DoCheck, OnDestroy {
 
   private listChangedSub: Subscription;
+  itemSelectedIndex:number;
 
   ingredients: Ingredient[];
 
@@ -30,5 +31,11 @@ export class ShoppingListComponent implements OnInit, DoCheck, OnDestroy {
 
   ngOnDestroy(){
     this.listChangedSub.unsubscribe();
+  }
+
+  ingredientSelected(index: number){
+    console.log("ingredientSelected exec");
+    this.shoppingListService.ingredientSelectedIndex.next(index);
+    this.itemSelectedIndex = index;
   }
 }

@@ -8,6 +8,7 @@ import { Ingredient } from "../shared/ingredient.model";
 export class ShoppingListService{
 
     listChanged = new Subject<Ingredient[]>();
+    ingredientSelectedIndex = new Subject<number>();
 
     private ingredients: Ingredient[] = [
         new Ingredient('cheese', 20)
@@ -34,21 +35,32 @@ export class ShoppingListService{
         this.listChanged.next(this.ingredients.slice());
     }
 
-    deleteItem(item: Ingredient){
-        let index = this.ingredients.findIndex((element)=>{
-            if((element.name === item.name) && (element.amount === item.amount)){
-              return true;
-            }else{
-              return false;
-            }
-          });
-          
-          if(index !== -1){
-            this.ingredients.splice(index, 1);
-          }else{
-            return console.log("Entry Does not exist");
-          }
-
-        this.listChanged.next(this.ingredients.slice());
+    onEditItem(index: number, item: Ingredient){
+      this.ingredients[index].name = item.name;
+      this.ingredients[index].amount = item.amount;
+      this.listChanged.next(this.ingredients.slice());
     }
+
+    onDeleteItem(index: number){
+      this.ingredients.splice(index, 1);
+      this.listChanged.next(this.ingredients.slice());
+    }
+
+    // deleteItem(item: Ingredient){
+    //     let index = this.ingredients.findIndex((element)=>{
+    //         if((element.name === item.name) && (element.amount === item.amount)){
+    //           return true;
+    //         }else{
+    //           return false;
+    //         }
+    //       });
+          
+    //       if(index !== -1){
+    //         this.ingredients.splice(index, 1);
+    //       }else{
+    //         return console.log("Entry Does not exist");
+    //       }
+
+    //     this.listChanged.next(this.ingredients.slice());
+    // }
 }
