@@ -46,21 +46,8 @@ export class ShoppingListService{
       this.listChanged.next(this.ingredients.slice());
     }
 
-    // deleteItem(item: Ingredient){
-    //     let index = this.ingredients.findIndex((element)=>{
-    //         if((element.name === item.name) && (element.amount === item.amount)){
-    //           return true;
-    //         }else{
-    //           return false;
-    //         }
-    //       });
-          
-    //       if(index !== -1){
-    //         this.ingredients.splice(index, 1);
-    //       }else{
-    //         return console.log("Entry Does not exist");
-    //       }
-
-    //     this.listChanged.next(this.ingredients.slice());
-    // }
+    updateFromServer(list: Ingredient[]){
+      this.ingredients = list
+      this.listChanged.next(list);
+    }
 }

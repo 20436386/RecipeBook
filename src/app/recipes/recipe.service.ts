@@ -12,22 +12,24 @@ export class RecipeService{
 
     recipeListUpdated = new Subject<Recipe[]>()
 
-    private recipes: Recipe[] = [
-        new Recipe('Eggs Benedict',
-        'Eggs and salmon on toast', 
-        'http://3.bp.blogspot.com/-_pdJXbExgXE/U8tXlkuY5MI/AAAAAAAAJyA/Z2wBv7EYG9M/s1600/1.jpg',
-        [
-            new Ingredient('egg', 2),
-            new Ingredient('bread', 1)
-        ]),
-        new Recipe('Pepparoni Pizza', 
-        'The only way to make a pizza!', 
-        'https://riotfest.org/wp-content/uploads/2016/10/Pepperoni_1.jpg',
-        [
-            new Ingredient('pepperoni', 300),
-            new Ingredient('pizza base', 1)
-        ])
-      ];
+    // private recipes: Recipe[] = [
+    //     new Recipe('Eggs Benedict',
+    //     'Eggs and salmon on toast', 
+    //     'http://3.bp.blogspot.com/-_pdJXbExgXE/U8tXlkuY5MI/AAAAAAAAJyA/Z2wBv7EYG9M/s1600/1.jpg',
+    //     [
+    //         new Ingredient('egg', 2),
+    //         new Ingredient('bread', 1)
+    //     ]),
+    //     new Recipe('Pepparoni Pizza', 
+    //     'The only way to make a pizza!', 
+    //     'https://riotfest.org/wp-content/uploads/2016/10/Pepperoni_1.jpg',
+    //     [
+    //         new Ingredient('pepperoni', 300),
+    //         new Ingredient('pizza base', 1)
+    //     ])
+    //   ];
+
+    private recipes: Recipe[] = []
 
     constructor(private shoppingListService: ShoppingListService){}
 
@@ -62,6 +64,11 @@ export class RecipeService{
 
     onAddToShoppingList(ingredients: Ingredient[]){
         this.shoppingListService.addManyItems(ingredients);
+    }
+
+    updateFromServer(serverRecipes: Recipe[]){
+        this.recipes = serverRecipes;
+        this.recipeListUpdated.next(serverRecipes);
     }
     
 }

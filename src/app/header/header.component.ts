@@ -1,28 +1,50 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../authenticate/auth.service';
+import { DataStorageService } from '../shared/data-storage.service';
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
 
-    //Used before routing was implemented
-    // @Output() featureSelected = new EventEmitter<string>();
+    userSub: Subscription;
+    authenticated:boolean;
 
-    constructor() { }
+
+    constructor(private dataStorageService: DataStorageService, private authService: AuthService) { }
   
     ngOnInit(): void {
+        this.authenticated = false;
+        this.userSub = this.authService.user.subscribe(user => {
+            // User will be null if not authenticated and will contain a user object if authenticated
+            if(user !== null){
+                this.authenticated = true;
+            }else{
+                this.authenticated = false;
+            }
+        })
     }
 
-    //This method was used before routing was implemented to emit which navbar link was clicked
-    // onSelect(event: MouseEvent){
-    //     // console.log(event);
-    //     if((<HTMLAreaElement>event.target).textContent === 'Recipes'){
-    //         this.featureSelected.emit("nav-recipe");
-    //     }else if((<HTMLAreaElement>event.target).textContent === 'Shopping List'){
-    //         this.featureSelected.emit("nav-Shopping-List");
-    //     }
-    // }
+    ngOnDestroy(): void {
+        this.userSub.unsubscribe();
+    }
+
+    onFetch(){
+        this.dataStorageService.getRecipes().subscribe((responseData) => {
+            console.log(responseData);
+            if(responseData === null){
+                let error = new Error("There are no recipes in the database!");
+                console.log(error);
+            }
+        });
+        this.dataStorageService.getShoppingList();
+    }
+
+    onSave(){
+        this.dataStorageService.storeData();
+    }
     
   }

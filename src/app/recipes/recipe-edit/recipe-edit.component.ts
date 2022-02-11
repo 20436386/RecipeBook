@@ -48,15 +48,15 @@ export class RecipeEditComponent implements OnInit {
       })
       for(let item of this.focusedRecipe.ingredients){
         const ingredient = new FormGroup({
-          "name": new FormControl(item.name, Validators.required),
-          "amount": new FormControl(item.amount, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)]),
+          "name": new FormControl(item.name),
+          "amount": new FormControl(item.amount, Validators.pattern(/^[1-9]+[0-9]*$/)),
         });
         (<FormArray>this.recipeForm.get("ingredients")).push(ingredient);
       }
     }else{
       const ingredient = new FormGroup({
-        "name": new FormControl(null, Validators.required),
-        "amount": new FormControl(null, [Validators.required, Validators.pattern("^[1-9]+[0-9]$")]),
+        "name": new FormControl(null),
+        "amount": new FormControl(null, Validators.pattern("^[1-9]+[0-9]$")),
       });
       (<FormArray>this.recipeForm.get("ingredients")).push(ingredient);
     }

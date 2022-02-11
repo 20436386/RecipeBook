@@ -15,6 +15,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { SelectRecipeComponent } from './recipes/select-recipe/select-recipe.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { RecipeService } from './recipes/recipe.service';
+import { HttpClientModule } from '@angular/common/http';
+import { RecipeResolverService } from './recipes/recipe-resolver.service';
+import { AuthenticateComponent } from './authenticate/authenticate.component';
+import { SpinnerIconComponent } from './shared/spinner-icon/spinner-icon.component';
 
 @NgModule({
   declarations: [
@@ -29,15 +33,18 @@ import { RecipeService } from './recipes/recipe.service';
     DropdownDirective,
     SelectRecipeComponent,
     RecipeEditComponent,
+    AuthenticateComponent,
+    SpinnerIconComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   //Note that RecipeService is included here so that this specific instance of the service is available to all child nodes. That way the Recipes array will not be reinitialized every time the recipe list initializes. 
-  providers: [RecipeService],
+  providers: [RecipeService, RecipeResolverService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
