@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from './authenticate/auth.service';
 import { RecipeService } from './recipes/recipe.service';
 
 @Component({
@@ -7,8 +8,14 @@ import { RecipeService } from './recipes/recipe.service';
   styleUrls: ['./app.component.css'],
 
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'CourseProject';
+
+  constructor(private authService: AuthService){}
+
+  ngOnInit(): void {
+    this.authService.autoLogin();    
+  }
 
   //code used before routing was implemented
   // recipeDisplay:boolean = true;

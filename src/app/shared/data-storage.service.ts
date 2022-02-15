@@ -20,14 +20,8 @@ export class DataStorageService{
     getRecipes(){
         //Get recipes
         //Note that observable is returned here and subscribe therefore has to be done in calling function
-        return this.authService.user.pipe(take(1), exhaustMap(user => {
-            console.log(user)
-            return this.http.get<Recipe[]>('https://ng-course-recipe-book-b490c-default-rtdb.firebaseio.com/recipes/.json', {
-            observe: "body",
-            params: new HttpParams().set('auth', user.token)
-            })
-        })
-        ).pipe(map((responseData) => {
+        return this.http.get<Recipe[]>('https://ng-course-recipe-book-b490c-default-rtdb.firebaseio.com/recipes/.json')
+        .pipe(map((responseData) => {
             //This code adds an ingredient key and assigns it a value of [] for Recipes in the database that do not have an ingredients property which is possible as the ingredients are not required in the form.
             for(let item of responseData){
                 if(item['ingredients'] === undefined){
@@ -48,20 +42,16 @@ export class DataStorageService{
 
     getShoppingList(){
          //Get shopping list
-         this.authService.user.pipe(take(1)).subscribe(user => {
-            this.http.get<Ingredient[]>('https://ng-course-recipe-book-b490c-default-rtdb.firebaseio.com/shopping-list/.json', {
-                observe: "body",
-                params: new HttpParams().set('auth', user.token)
-            }).subscribe((responseData) => {
-                // console.log(responseData);
-                if(responseData === null){
-                    let error = new Error("There are no ingredients in the database!");
-                    console.log(error);
-                }else{
-                    this.shoppingListService.updateFromServer(responseData);
-                }
-            })
-         })
+        this.http.get<Ingredient[]>('https://ng-course-recipe-book-b490c-default-rtdb.firebaseio.com/shopping-list/.json')
+        .subscribe((responseData) => {
+            // console.log(responseData);
+            if(responseData === null){
+                let error = new Error("There are no ingredients in the database!");
+                console.log(error);
+            }else{
+                this.shoppingListService.updateFromServer(responseData);
+            }
+        })
     }
 
     storeData(){

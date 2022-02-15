@@ -58,6 +58,7 @@ export class AuthenticateComponent implements OnInit {
         this.router.navigate(['/recipes']);
       },
       error: (errorMessage) => {
+        console.log("In observer error authenticate.component.ts")
         this.isLoading = false;
         this.errorResponse = true;
         this.errorResponseMessage = errorMessage;

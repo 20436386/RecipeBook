@@ -15,10 +15,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { SelectRecipeComponent } from './recipes/select-recipe/select-recipe.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { RecipeService } from './recipes/recipe.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RecipeResolverService } from './recipes/recipe-resolver.service';
 import { AuthenticateComponent } from './authenticate/authenticate.component';
 import { SpinnerIconComponent } from './shared/spinner-icon/spinner-icon.component';
+import { AuthInterceptorService } from './authenticate/auth-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -33,18 +34,21 @@ import { SpinnerIconComponent } from './shared/spinner-icon/spinner-icon.compone
     DropdownDirective,
     SelectRecipeComponent,
     RecipeEditComponent,
-    AuthenticateComponent,
-    SpinnerIconComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    ReactiveFormsModule,
-    HttpClientModule
+    ReactiveFormsModule
   ],
   //Note that RecipeService is included here so that this specific instance of the service is available to all child nodes. That way the Recipes array will not be reinitialized every time the recipe list initializes. 
-  providers: [RecipeService, RecipeResolverService],
+  providers: [RecipeService, 
+    RecipeResolverService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

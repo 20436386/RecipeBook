@@ -24,4 +24,13 @@ export class User{
         }
         return this._token;
     }
+
+    get tokenTimeout(){
+        const timeout = (this._tokenExpirationDate.getTime() - Date.now());
+        if(timeout > 0){
+            return timeout;
+        }else{
+            return 0;
+        }
+    }
 }

@@ -1,5 +1,7 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
+import { stringify } from "querystring";
 import { BehaviorSubject, catchError, throwError, tap,  } from "rxjs";
 import { User } from "./user.model";
 
@@ -18,8 +20,9 @@ export interface authResponseData{
 export class AuthService{
 
     user = new BehaviorSubject<User>(null);
+    tokenTimer: any = null;
 
-    constructor(private http: HttpClient){}
+    constructor(private http: HttpClient, private router: Router){}
 
     signUp(body: {email: string, password: string}){
         body['returnSecureToken'] = true;
@@ -35,6 +38,45 @@ export class AuthService{
         .pipe(catchError(this.errorParse), tap(resData => this.handleAuth(resData))); 
     }
 
+    autoLogin(){
+        const userData: {email: string, id: string, _token: string,_tokenExpirationDate: string } = JSON.parse(localStorage.getItem('userData'));
+        // console.log(userData);
+        if(userData === null){
+            // console.log(" No user data in local storage")
+            return;
+        }else{
+            //Create new user object and determine if token is valid
+            const loadedUser = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
+            if(loadedUser.token != null){
+                this.user.next(loadedUser);
+                let tokenTimeout = loadedUser.tokenTimeout
+                if(tokenTimeout){
+                    // console.log("Time left in session:", (tokenTimeout/1000)/60, 'minutes');
+                    this.autoLogout(tokenTimeout);
+                }else{
+                    this.signOut();
+                }
+            }
+        }
+    }
+
+    signOut(){
+        this.user.next(null);
+        localStorage.removeItem('userData');
+        if(this.tokenTimer !== null){
+            clearTimeout(this.tokenTimer);
+            this.tokenTimer = null;
+        }
+        //This is done here and not in the header so that rerouting can occur when token expires
+        this.router.navigate(['/authorize']);
+    }
+
+    autoLogout(expirationDuration: number){
+        this.tokenTimer = setTimeout(() => {
+            this.signOut();
+        }, expirationDuration);
+    }
+
     private handleAuth(resData: authResponseData){
 
         const expirationDate = new Date(Date.now() + (+resData.expiresIn * 1000));
@@ -43,16 +85,21 @@ export class AuthService{
             resData.idToken,
             expirationDate);
         this.user.next(user);
+        this.autoLogout(+resData.expiresIn * 1000);
+        localStorage.setItem('userData', JSON.stringify(user));
     }
 
     private errorParse(errorRes: HttpErrorResponse){
         // This code is placed in the service file, as code in the component should be primarily focused on updating the UI
-            
-        console.log(errorRes.error.error.message);
+        console.log("In observer error auth.service.ts")
         let errorResponseMessage = "An unknown error has ocurred!";
+        console.log(errorResponseMessage);
         if(!errorRes.error || !errorRes.error.error){
+            console.log("error wrong format auth.service.ts")
+            console.log(errorRes);
             return throwError(() => errorResponseMessage);
         }
+        console.log(errorRes.error.error.message);
 
         switch(errorRes.error.error.message){
             case 'EMAIL_EXISTS': errorResponseMessage = "That email address is already in use by another account.";
@@ -73,6 +120,7 @@ export class AuthService{
             case 'USER_DISABLED': errorResponseMessage = "The user account has been disabled by an administrator";
                 break;
         }
+        console.log(errorResponseMessage);
         return throwError(() => errorResponseMessage);
     }
 

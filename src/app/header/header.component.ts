@@ -1,35 +1,22 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { AuthService } from '../authenticate/auth.service';
-import { DataStorageService } from '../shared/data-storage.service';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit {
 
-    userSub: Subscription;
-    authenticated:boolean;
+    //Used before routing was implemented
+    // @Output() featureSelected = new EventEmitter<string>();
 
-
-    constructor(private dataStorageService: DataStorageService, private authService: AuthService) { }
+    constructor() { }
   
     ngOnInit(): void {
-        this.authenticated = false;
-        this.userSub = this.authService.user.subscribe(user => {
-            // User will be null if not authenticated and will contain a user object if authenticated
-            if(user !== null){
-                this.authenticated = true;
-            }else{
-                this.authenticated = false;
-            }
-        })
     }
 
-    ngOnDestroy(): void {
-        this.userSub.unsubscribe();
+    onLogout(){
+        this.authService.signOut();
     }
 
     onFetch(){
