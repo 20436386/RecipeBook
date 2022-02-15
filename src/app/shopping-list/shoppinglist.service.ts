@@ -16,6 +16,10 @@ export class ShoppingListService{
 
     private ingredients: Ingredient[] = [];
 
+    updateFromServer(list: Ingredient[]){
+        this.ingredients = list;
+    }
+
     getIngredients(){
         return this.ingredients.slice();
     }

@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { AlertComponent } from '../shared/alert/alert.component';
+import { PlaceholderDirective } from '../shared/placeholder/placeholder.directive';
 import { AuthService, authResponseData } from './auth.service';
 
 @Component({
@@ -19,8 +21,12 @@ export class AuthenticateComponent implements OnInit {
   errorResponse: boolean;
   errorResponseMessage: string;
   isLoading: boolean;
+  @ViewChild(PlaceholderDirective, {static: false}) alertHost: PlaceholderDirective;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  // private closeSub: Subscription;
+
+
+  constructor(private authService: AuthService, private router: Router, private cmpFactoryResolver: ComponentFactoryResolver) { }
 
   ngOnInit(): void {
     this.isLoading = false;
@@ -62,10 +68,34 @@ export class AuthenticateComponent implements OnInit {
         this.isLoading = false;
         this.errorResponse = true;
         this.errorResponseMessage = errorMessage;
+        // this.showErrorAlert(errorMessage);
       }
     });
 
     this.userForm.reset();
   }
+
+  // onHandleError(){
+  //   this.errorResponse = false;
+  //   this.errorResponseMessage = null;
+  // }
+
+  // private showErrorAlert(message: string){
+  //   const hostVCF = this.alertHost.viewContainerRef;
+  //   hostVCF.clear();
+  //   const componentRef = hostVCF.createComponent(AlertComponent);
+
+  //   componentRef.instance.message = message;
+  //   this.closeSub = componentRef.instance.event.subscribe(() => {
+  //     this.closeSub.unsubscribe();
+  //     hostVCF.clear();
+  //   })
+  // }
+
+  // ngOnDestroy(): void {
+  //     if(this.closeSub){
+  //       this.closeSub.unsubscribe();
+  //     }
+  // }
 
 }

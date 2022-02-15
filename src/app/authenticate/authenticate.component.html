@@ -1,0 +1,49 @@
+<!-- <ng-template appPlaceholder></ng-template> -->
+<div class="row">
+    <div class="col-sm-12 col-md-8 offset-md-2">
+        <div *ngIf="!isLoading">
+            <h1 *ngIf="loginMode">User Login</h1>
+            <h1 *ngIf="!loginMode">Register</h1>
+
+            <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+                <div class="mb-3">
+                    <label for="email">Email</label>
+                    <input type="email" [formControlName]="'email'" class="form-control">
+                    <!-- Should have this check as userForm.get('email').errors['email'] will return null if input valid which will give errors -->
+                    <div *ngIf="userForm.get('email').touched && userForm.get('email').invalid">
+                        <div class="form-text" *ngIf="userForm.get('email').errors['email']">This is not a valid email address!</div>
+                        <div class="form-text" *ngIf="userForm.get('email').errors.hasOwnProperty('required')">This field is required!</div>
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+                    <label for="password">Password</label>
+                    <input type="password" [formControlName]="'password'" class="form-control">
+                    <div *ngIf="userForm.get('password').touched && userForm.get('password').invalid">
+                        <div class="form-text" *ngIf="userForm.get('password').errors.hasOwnProperty('required')">This field is required!</div>
+                        <div class="form-text" *ngIf="userForm.get('password').errors.hasOwnProperty('minlength')">Minimum length of six characters</div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" *ngIf="loginMode" [disabled]="userForm.invalid">Login</button>
+                <button type="submit" class="btn btn-primary" *ngIf="!loginMode" [disabled]="userForm.invalid">Submit</button>
+
+                <div class="form-text" *ngIf="loginMode">Don't have an account?</div>
+                <a class="link-secondary" style="cursor: pointer;" *ngIf="loginMode" (click)="onRegister()">Register here</a>
+            </form>
+
+            <div class="alert alert-danger mt-3" role="alert" *ngIf="errorResponse">
+                <p><strong>Error has ocurred:</strong></p>
+                <P>{{errorResponseMessage}}</P>
+            </div>
+            <!-- <app-alert [message]="errorResponseMessage" *ngIf="errorResponse" (event)="onHandleError()"></app-alert>            -->
+        </div>
+
+        <div *ngIf="isLoading" class="row justify-content-center">
+            <div class="col-sm-1 spinner-offset">
+                <app-spinner-icon></app-spinner-icon>
+            </div>
+        </div>
+    </div>
+</div>

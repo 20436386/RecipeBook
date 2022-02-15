@@ -6,7 +6,8 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
-          <li class="nav-item">
+
+          <li class="nav-item" *ngIf="authenticated">
             <!-- <a class="nav-link" href="#" (click)="onSelect('nav-recipe')">Recipes</a> -->
             <!-- NB: could just pass a string straight to onSelect as below -->
 
@@ -17,7 +18,12 @@
             <a class="nav-link" routerLinkActive="active" [routerLink]="['/recipes']">Recipes</a>
 
           </li>
-          <li class="nav-item">
+
+          <li routerLinkActive="active" *ngIf="!authenticated">
+            <a class="nav-link" routerLink="/authorize">Login</a>
+          </li>
+
+          <li class="nav-item" *ngIf="authenticated">
             <!-- This was used before routing was implemented, routing was done using event emitting and ngIf -->
             <!-- <a class="nav-link" href="#" (click)="onSelect($event)">Shopping List</a> -->
 
@@ -33,8 +39,8 @@
                 Manage
                 </a>
                 <ul class="dropdown-menu ms-auto" aria-labelledby="navbarDropdownMenuLink">
-                    <li><a class="dropdown-item" style="cursor: pointer;" >Save</a></li>
-                    <li><a class="dropdown-item" style="cursor: pointer;" >Fetch</a></li>
+                    <li><a class="dropdown-item" style="cursor: pointer;" (click)="onSave()">Save</a></li>
+                    <li><a class="dropdown-item" style="cursor: pointer;" (click)="onFetch()">Fetch</a></li>
                 </ul>
             </li>
         </ul>
