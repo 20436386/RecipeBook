@@ -18,6 +18,7 @@ export class ShoppingListService{
 
     updateFromServer(list: Ingredient[]){
         this.ingredients = list;
+        this.listChanged.next(this.ingredients.slice());
     }
 
     getIngredients(){

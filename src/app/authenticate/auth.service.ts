@@ -1,9 +1,9 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { stringify } from "querystring";
 import { BehaviorSubject, catchError, throwError, tap,  } from "rxjs";
 import { User } from "./user.model";
+import { environment } from "src/environments/environment";
 
 export interface authResponseData{
     idToken: 	string, 
@@ -26,14 +26,14 @@ export class AuthService{
 
     signUp(body: {email: string, password: string}){
         body['returnSecureToken'] = true;
-        let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[API KEY]'; 
+        let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + environment.firebaseApiKey; 
         return this.http.post<authResponseData>(url, body)
         .pipe(catchError(this.errorParse), tap(resData => this.handleAuth(resData))); 
     }
 
     signIn(body: {email: string, password: string}){
         body['returnSecureToken'] = true;
-        let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[API KEY]'; 
+        let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.firebaseApiKey; 
         return this.http.post<authResponseData>(url, body)
         .pipe(catchError(this.errorParse), tap(resData => this.handleAuth(resData))); 
     }

@@ -26,12 +26,13 @@ export class AuthenticateComponent implements OnInit {
   // private closeSub: Subscription;
 
 
-  constructor(private authService: AuthService, private router: Router, private cmpFactoryResolver: ComponentFactoryResolver) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.isLoading = false;
     this.loginMode = true;
     this.errorResponse = false;
+    
     this.userForm = new FormGroup({
       email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, [Validators.required, Validators.minLength(6)])
