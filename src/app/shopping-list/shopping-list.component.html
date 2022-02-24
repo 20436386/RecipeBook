@@ -9,7 +9,7 @@
                 style='cursor:pointer'
                 (click)="ingredientSelected(i)"
                 [ngClass]="{'active': (itemSelectedIndex === i)}"
-                *ngFor='let item of ingredients; let i = index'>
+                *ngFor='let item of (ingredients | async).ingredients; let i = index'>
                 {{item.name}} ({{item.amount}})
             </a>
         </ul>

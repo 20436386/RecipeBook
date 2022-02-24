@@ -1,21 +1,32 @@
 import { HttpClient, HttpEventType, HttpParams, HttpResponse } from '@angular/common/http'
-import { Injectable } from '@angular/core';
-import { map, tap, take, exhaustMap } from 'rxjs';
+import { Injectable, OnInit } from '@angular/core';
+import { map, tap, take, exhaustMap, Subscription } from 'rxjs';
 import { RecipeService } from '../recipes/recipe.service';
 import { Recipe } from '../recipes/recipes.model';
 import { Ingredient } from './ingredient.model';
-import { ShoppingListService } from '../shopping-list/shoppinglist.service';
 import { AuthService } from '../authenticate/auth.service';
+import { Store } from '@ngrx/store';
+import * as fromShoppingList from 'src/app/shopping-list/store/shopping-list.reducer';
+import * as shoppingListActions from 'src/app/shopping-list/store/shopping-list.actions';
 
 @Injectable({
     providedIn: 'root'
 })
 export class DataStorageService{
 
+    private storeSub: Subscription;
+    state: fromShoppingList.State;
+
     //Have subscribe method here to emit error when database is empty and get request occurs
 
-    constructor(private http: HttpClient, private recipeService: RecipeService, private authService: AuthService, 
-        private shoppingListService: ShoppingListService){}
+    constructor(private http: HttpClient, private recipeService: RecipeService, private authService: AuthService, private store: Store<fromShoppingList.AppState>){
+        //Dont think its wise setup subscription here?
+        this.storeSub = this.store.select('shoppingList').subscribe((state) => {
+            console.log("state received")
+            this.state = state;
+        })
+    }
+
 
     getRecipes(){
         //Get recipes
@@ -49,7 +60,7 @@ export class DataStorageService{
                 let error = new Error("There are no ingredients in the database!");
                 console.log(error);
             }else{
-                this.shoppingListService.updateFromServer(responseData);
+                this.store.dispatch(new shoppingListActions.UpdateFromServer(responseData));
             }
         })
     }
@@ -66,9 +77,10 @@ export class DataStorageService{
         })
 
         //Put shopping list
+        console.log("inside storedata(), list: " + this.state.ingredients);
         url = 'https://ng-course-recipe-book-b490c-default-rtdb.firebaseio.com/shopping-list/.json';
         console.log(url);
-        this.http.put<{[key: string] : string}>(url, this.shoppingListService.getIngredients(), {
+        this.http.put<{[key: string] : string}>(url, this.state.ingredients, {
             observe: 'body'
         })
         .subscribe((responseData) => {
