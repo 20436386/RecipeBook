@@ -19,10 +19,17 @@ export class User{
         ){}
 
     get token(){
-        if(!this._token || new Date() > this._tokenExpirationDate){
+        // if(!this._token || new Date() > this._tokenExpirationDate){
+        //     return null;
+        // }
+        // return this._token;
+
+        if(new Date() > this._tokenExpirationDate){
             return null;
+        }else{
+            return this._token;
         }
-        return this._token;
+        
     }
 
     get tokenTimeout(){

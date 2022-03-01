@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { AuthService } from './authenticate/auth.service';
 import { RecipeService } from './recipes/recipe.service';
+import * as fromApp from './store/app.reducer';
+import * as authActions from './authenticate/store/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -11,10 +14,12 @@ import { RecipeService } from './recipes/recipe.service';
 export class AppComponent implements OnInit{
   title = 'CourseProject';
 
-  constructor(private authService: AuthService){}
+  // constructor(private authService: AuthService){}
+  constructor(private store: Store<fromApp.AppState>){}
 
   ngOnInit(): void {
-    this.authService.autoLogin();    
+    // this.authService.autoLogin();
+    this.store.dispatch(new authActions.AutoLogin());
   }
 
   //code used before routing was implemented

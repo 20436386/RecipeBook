@@ -11,7 +11,9 @@ import { RecipeService } from './recipes/recipe.service';
 import { RecipeResolverService } from './recipes/recipe-resolver.service';
 import { AuthInterceptorService } from './authenticate/auth-interceptor.service';
 import { SharedModule } from './shared/shared.module';
-import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer';
+import { appReducer } from './store/app.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './authenticate/store/auth.effects';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { shoppingListReducer } from './shopping-list/store/shopping-list.reducer
     AppRoutingModule,
     HttpClientModule,
     SharedModule,
-    StoreModule.forRoot({shoppingList: shoppingListReducer})
+    StoreModule.forRoot(appReducer),
+    EffectsModule.forRoot([AuthEffects])
   ],
   //Note that RecipeService is included here so that this specific instance of the service is available to all child nodes. That way the Recipes array will not be reinitialized every time the recipe list initializes. 
   providers: [RecipeService, 

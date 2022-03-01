@@ -7,7 +7,8 @@ import { Ingredient } from './ingredient.model';
 import { AuthService } from '../authenticate/auth.service';
 import { Store } from '@ngrx/store';
 import * as fromShoppingList from 'src/app/shopping-list/store/shopping-list.reducer';
-import * as shoppingListActions from 'src/app/shopping-list/store/shopping-list.actions';
+import * as shoppingListActions from 'src/app/shopping-list/store/shopping-list.actions'
+import * as fromApp from 'src/app/store/app.reducer';
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +20,7 @@ export class DataStorageService{
 
     //Have subscribe method here to emit error when database is empty and get request occurs
 
-    constructor(private http: HttpClient, private recipeService: RecipeService, private authService: AuthService, private store: Store<fromShoppingList.AppState>){
+    constructor(private http: HttpClient, private recipeService: RecipeService, private authService: AuthService, private store: Store<fromApp.AppState>){
         //Dont think its wise setup subscription here?
         this.storeSub = this.store.select('shoppingList').subscribe((state) => {
             console.log("state received")
