@@ -20,7 +20,7 @@ const recipeRoutes: Route[] = [
         ],
         //This ensures that if the user logs out while on the recipe page, the authGuard will be rerun.
         //https://angular.io/api/router/Route#runGuardsAndResolvers
-        runGuardsAndResolvers: 'always'
+        // runGuardsAndResolvers: 'always'
         
     }];
 

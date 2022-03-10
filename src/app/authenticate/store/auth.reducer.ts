@@ -27,8 +27,7 @@ export function authReducer(state: State = initialState, action: authActions.aut
             return newState;
 
         case authActions.AUTHENTICATE_SUCCESS:
-            console.log("inside AuthenticateSuccess case in reducer");
-            newState.user = action.payload;
+            newState.user = action.payload.user;
             newState.loading = false;
             Object.freeze(newState);
             return newState;
@@ -41,7 +40,6 @@ export function authReducer(state: State = initialState, action: authActions.aut
             return newState;
         
         case authActions.LOGOUT:
-            console.log("inside logout case in reducer");
             newState.user = null;
             Object.freeze(newState);
             return newState;

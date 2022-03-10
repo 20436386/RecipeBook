@@ -2,9 +2,11 @@ import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/cor
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../authenticate/auth.service';
-import { DataStorageService } from '../shared/data-storage.service';
 import * as fromApp from "../store/app.reducer";
 import * as authActions from "../authenticate/store/auth.actions";
+import * as recipeActions from '../recipes/store/recipe.actions';
+import * as slActions from '../shopping-list/store/shopping-list.actions';
+
 
 @Component({
     selector: 'app-header',
@@ -18,7 +20,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     authenticated = false;
     private userSub: Subscription;
 
-    constructor(private dataStorageService: DataStorageService, private authService: AuthService, private store: Store<fromApp.AppState>) { }
+    constructor(private authService: AuthService, private store: Store<fromApp.AppState>) { }
   
     ngOnInit(): void {
         this.userSub = this.store.select("auth").subscribe(authState => {
@@ -35,18 +37,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     onFetch(){
-        this.dataStorageService.getRecipes().subscribe((responseData) => {
-            console.log(responseData);
-            if(responseData === null){
-                let error = new Error("There are no recipes in the database!");
-                console.log(error);
-            }
-        });
-        this.dataStorageService.getShoppingList();
+        // this.dataStorageService.getRecipes().subscribe((responseData) => {
+        //     console.log(responseData);
+        //     if(responseData === null){
+        //         let error = new Error("There are no recipes in the database!");
+        //         console.log(error);
+        //     }
+        //     // this.store.dispatch(new recipeActions.UpdateFromServer(responseData));
+        // });
+
+        this.store.dispatch(new recipeActions.FetchRecipes());
+
+        // this.dataStorageService.getShoppingList();
+        this.store.dispatch(new slActions.FetchList());
     }
 
     onSave(){
-        this.dataStorageService.storeData();
+        // this.dataStorageService.storeData();
+        this.store.dispatch(new recipeActions.StoreRecipes());
+        this.store.dispatch(new slActions.StoreList());
     }
 
     ngOnDestroy(): void {

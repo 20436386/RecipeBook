@@ -25,7 +25,10 @@ const handleAuth = (resData: any) => {
         expirationDate
     );
     localStorage.setItem('userData', JSON.stringify(user));
-    return new authActions.AuthenticateSuccess(user);
+    var payload = {user: user, redirect: true};
+    return  new authActions.AuthenticateSuccess(payload);
+    // return  new authActions.AuthenticateSuccess(user);
+
 }
 
 const handleError = (errorRes: HttpErrorResponse) => {
@@ -94,7 +97,7 @@ export class AuthEffects {
             ofType(authActions.AUTO_LOGIN),
             map(() => {
                 const userData: {email: string, id: string, _token: string,_tokenExpirationDate: string } = JSON.parse(localStorage.getItem('userData'));
-                // console.log(userData);
+                // console.log("User data from local storage: ", userData);
                 if(userData === null){
                     // console.log(" No user data in local storage")
                     //can return dummy action:
@@ -104,9 +107,11 @@ export class AuthEffects {
                     //Create new user object and determine if token is valid
                     const loadedUser = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate));
                     if(loadedUser.token !== null){
-
+                        // console.log("User token != null, setting logout timer and dispatching authsuccess");
                         this.authService.setLogoutTimer(loadedUser.tokenTimeout);
-                        return  new authActions.AuthenticateSuccess(loadedUser);
+                        var payload = {user: loadedUser, redirect: false};
+                        return  new authActions.AuthenticateSuccess(payload);
+                        // return  new authActions.AuthenticateSuccess(loadedUser);
                     }else{
                         return new authActions.Logout();
                     }
@@ -129,9 +134,14 @@ export class AuthEffects {
     authSuccess = createEffect(() => {
         return this.actions$.pipe(
             ofType(authActions.AUTHENTICATE_SUCCESS),
-            tap(() => {
-                console.log("inside authRedirect effect");
-                this.router.navigate(['/'], {skipLocationChange: true});
+            tap((authData: authActions.AuthenticateSuccess) => {
+                // console.log("inside authSuccess effect");
+                if(authData.payload.redirect){
+                    // console.log("redirect true, thus redirecting");
+                    this.router.navigate(['/']);
+                }
+                // this.router.navigate(['/']);
+
                 })
             );
     }, {dispatch: false});
@@ -158,6 +168,8 @@ export class AuthEffects {
             })
         )
     })
+
+
     
     constructor(private actions$: Actions, private http: HttpClient, private router: Router, private authService: AuthService){}
 }

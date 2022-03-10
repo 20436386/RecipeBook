@@ -4,6 +4,7 @@ import { Store } from "@ngrx/store";
 import { exhaustMap, map, Observable, take } from "rxjs";
 import { AuthService } from "./auth.service";
 import * as fromApp from "../store/app.reducer";
+import * as fromAuth from "./store/auth.reducer";
 
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor{
@@ -16,11 +17,14 @@ export class AuthInterceptorService implements HttpInterceptor{
         
         return this.store.select("auth").pipe(
             take(1), 
-            map(authState => {
+            map((authState: fromAuth.State) => {
+                // console.log("inside intercept service(first), user =", authState.user);
                 return authState.user;
             }),
             exhaustMap(user => {
             if(user !== null){
+                // console.log("inside intercept service(first), user =", user);
+                // console.log("Inside intercept service, user token = ", user.token);
                 const modifiedRequest = req.clone({params: req.params.append('auth', user.token)});
                 return next.handle(modifiedRequest); 
             }else{

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AuthService } from './authenticate/auth.service';
-import { RecipeService } from './recipes/recipe.service';
 import * as fromApp from './store/app.reducer';
 import * as authActions from './authenticate/store/auth.actions';
 
